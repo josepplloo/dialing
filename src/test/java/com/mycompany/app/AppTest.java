@@ -1,15 +1,15 @@
 package com.mycompany.app;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
-import java.util.function.Consumer;
-import java.util.stream.IntStream;
 import java.util.logging.Logger;
 
 import com.mycompany.model.*;
-import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
@@ -19,15 +19,14 @@ public class AppTest
 {
   private static final Logger LOGGER = Logger.getLogger(AppTest.class.getName());
 
-    
     @Test
     public void shouldDispatchtheCalls() throws InterruptedException, ExecutionException {
       PriorityBlockingQueue<Employee> emploees = new PriorityBlockingQueue<>();
 
       List<Employee> staff = Arrays.asList(
-          new Employee("mkyong"),
-          new Employee("jack"),
-          new Employee("lawrence")
+          new Operator("mkyong"),
+          new Supervisor("jack"),
+          new Director("lawrence")
       );
 
       final List<Call> calls =  Arrays.asList(new Call(1, 5), new Call(2, 6));
@@ -51,5 +50,14 @@ public class AppTest
       }
        
       executorService.shutdown();
+    }
+
+    @Test
+    public void testEmploeesRole() {
+      Operator operator = new Operator("Peter");
+      Director director = new Director("Mr Burns");
+      Supervisor supervisor = new Supervisor("Ms Smiters");
+      assertEquals("Smitters is my boss", 1, supervisor.compareTo(operator));
+      assertEquals("Burns is my boss", 1, director.compareTo(operator));
     }
 }

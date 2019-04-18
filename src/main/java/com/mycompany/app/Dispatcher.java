@@ -1,6 +1,5 @@
 package com.mycompany.app;
 
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.logging.Logger;
 

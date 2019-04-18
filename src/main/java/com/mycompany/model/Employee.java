@@ -2,7 +2,7 @@ package com.mycompany.model;
 
 public class Employee implements Comparable<Employee> {
   private String name;
-  private Priority rol;
+  private Priority role;
 
   public Employee(String name) {
     this.name = name;
@@ -16,17 +16,17 @@ public class Employee implements Comparable<Employee> {
     this.name = name;
   }
 
-  public Priority getRol() {
-    return rol;
+  public Priority getRole() {
+    return role;
   }
 
-  public void setRol(Priority rol) {
-    this.rol = rol;
+  public void setRole(Priority role) {
+    this.role = role;
   }
 
   @Override
   public int compareTo(Employee employee) {
-        return this.rol.getPriority().compareTo(employee.getRol().getPriority());
+        return this.role.getPriority().compareTo(employee.getRole().getPriority());
   }
 
   enum Priority {
