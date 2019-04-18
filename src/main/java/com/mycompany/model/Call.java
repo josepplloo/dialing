@@ -21,7 +21,7 @@ public class Call {
 	public void setTime(Integer time) {
 		this.time = time;
 	}
-	public void print(){
-               System.out.println("Number:"+number + ", Time:"+time);
-        }
+	public void print() {
+    System.out.println("Number:"+number + ", Time:"+time);
+  }
 }

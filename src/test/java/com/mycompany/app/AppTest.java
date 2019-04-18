@@ -1,6 +1,5 @@
 package com.mycompany.app;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
@@ -24,32 +23,31 @@ public class AppTest
       PriorityBlockingQueue<Employee> emploees = new PriorityBlockingQueue<>();
 
       List<Employee> staff = Arrays.asList(
-          new Operator("mkyong"),
           new Supervisor("jack"),
-          new Director("lawrence")
+          new Director("lawrence"),
+          new Operator("mkyong")
       );
 
-      final List<Call> calls =  Arrays.asList(new Call(1, 5), new Call(2, 6));
-
-      staff.stream().map(i -> emploees.add(i)) ;
+      for (Employee s : staff) {
+        System.out.println(s.getName());
+        emploees.add(s);
+      }
       
-      Dispatcher dispatcher = new Dispatcher(emploees);
+      Dispatcher dispatcher = new Dispatcher(emploees, 3);
 
-      ExecutorService executorService = Executors.newFixedThreadPool(2); 
-        
-      List<Callable<Employee>> callablesEmployeeList = new ArrayList<>();
-      calls.stream().map(call -> callablesEmployeeList.add(new Service(dispatcher, call)));
+      final List<Call> calls =  Arrays.asList(
+        new Call(1, 9), new Call(2, 6),
+        new Call(3, 6), new Call(4, 5),
+        new Call(5, 5), new Call(6, 10),
+        new Call(7, 8), new Call(8, 9),
+        new Call(9, 6), new Call(10, 8));
       
-      
-      List<Future<Employee>> futureList = executorService.invokeAll(callablesEmployeeList);
-
-      for(Future<Employee> future : futureList) {
-        Employee e = future.get();
-        LOGGER.info(e.getName());
-        assert future.isDone();
+      for (Call c : calls) {
+        System.out.println(c.getTime());
+        dispatcher.dispatchCall(c);
       }
        
-      executorService.shutdown();
+      dispatcher.shutdown(20);
     }
 
     @Test

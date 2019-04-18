@@ -1,33 +1,46 @@
 package com.mycompany.app;
 
+import java.util.concurrent.*;
 import java.util.concurrent.PriorityBlockingQueue;
-import java.util.logging.Logger;
-
-
-import com.mycompany.model.Call;
-import com.mycompany.model.Employee;
+import com.mycompany.model.*;
 
 public class Dispatcher {
-  private final static Logger LOGGER = Logger.getLogger(Dispatcher.class.getName());
 
+  private PriorityBlockingQueue<Employee> queue;
+  private ExecutorService executorService;
 
-  private PriorityBlockingQueue<Employee> employees;
+  public Dispatcher(PriorityBlockingQueue<Employee> queue, int calls) {
+    this.queue = queue;
+    this.executorService = Executors.newFixedThreadPool(calls);
 
-  public Dispatcher(PriorityBlockingQueue<Employee> employees) {
-    this.employees = employees;
   }
 
-  public Employee dispatchCall(Call call) {
-    Employee employee = null;
-    try {
-      employee = employees.take();
-      LOGGER.info("Dialing from #" + call.number + " Assigned to " + employee);
-      Thread.sleep(call.time*1000);
-      LOGGER.info("Hang up to " +call.number);
-      employees.add(employee);
-    } catch (InterruptedException e) {
-      LOGGER.warning(""+e);
+  public void dispatchCall(Call call) throws InterruptedException {
+      Employee employee = queue.take();
+      executorService.submit(answerCall(employee, call));
+  }
+
+  private Runnable answerCall(Employee employee, Call call) {
+    Runnable r = () -> {
+      try {
+        System.out.println("Dialing from #" + call.number +" Assigned to " + employee.getName());
+        Thread.sleep(call.getTime());
+        queue.add(employee);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      };
+		};
+		return r;
+  }
+
+  void shutdown(int timeout) throws InterruptedException {
+    executorService.shutdown();
+
+    if(!executorService.awaitTermination(timeout, TimeUnit.SECONDS)){
+      System.out.println("shutingdown . . .");
+      executorService.shutdownNow();
     }
-    return employee;
-}
+
+  }
+
 }
