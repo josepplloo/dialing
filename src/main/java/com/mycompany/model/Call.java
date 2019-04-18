@@ -1,4 +1,4 @@
-package com.mycompany.call;
+package com.mycompany.model;
 
 public class Call {
   public int number;

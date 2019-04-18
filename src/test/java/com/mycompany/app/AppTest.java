@@ -1,12 +1,14 @@
 package com.mycompany.app;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.function.Consumer;
-import com.mycompany.call.Call;
+import java.util.stream.IntStream;
+import java.util.logging.Logger;
+
+import com.mycompany.model.*;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -15,28 +17,39 @@ import org.junit.Test;
  */
 public class AppTest 
 {
-    /**
-     * Rigorous Test :-)
-     */
-    @Test
-    public void shouldAnswertheCalls() {
-      final List<Call> calls =  Arrays.asList(new Call(1, 5), new Call(2, 6));
-      ExecutorService service =  Executors.newFixedThreadPool(2);
+  private static final Logger LOGGER = Logger.getLogger(AppTest.class.getName());
 
-      Runnable r = () -> {
-          System.out.println(Thread.currentThread().getName());
-          Consumer<Call> consumer = (Call call) -> {
-            System.out.println(call.getNumber());
-            try {
-              Thread.currentThread().sleep(10);
-            } catch (InterruptedException e) {
-              //TODO: handle exception
-            }
-          };       
-          calls.forEach(consumer);
+    
+    @Test
+    public void shouldDispatchtheCalls() throws InterruptedException, ExecutionException {
+      PriorityBlockingQueue<Employee> emploees = new PriorityBlockingQueue<>();
+
+      List<Employee> staff = Arrays.asList(
+          new Employee("mkyong"),
+          new Employee("jack"),
+          new Employee("lawrence")
+      );
+
+      final List<Call> calls =  Arrays.asList(new Call(1, 5), new Call(2, 6));
+
+      staff.stream().map(i -> emploees.add(i)) ;
+      
+      Dispatcher dispatcher = new Dispatcher(emploees);
+
+      ExecutorService executorService = Executors.newFixedThreadPool(2); 
+        
+      List<Callable<Employee>> callablesEmployeeList = new ArrayList<>();
+      calls.stream().map(call -> callablesEmployeeList.add(new Service(dispatcher, call)));
+      
+      
+      List<Future<Employee>> futureList = executorService.invokeAll(callablesEmployeeList);
+
+      for(Future<Employee> future : futureList) {
+        Employee e = future.get();
+        LOGGER.info(e.getName());
+        assert future.isDone();
+      }
        
-      };
-    service.execute(r);
-    assertTrue( true );
+      executorService.shutdown();
     }
 }
