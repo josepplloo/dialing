@@ -24,7 +24,7 @@ Java version: 11.
 
 # Project structure.
 You can find the following structure for this project,
-fell free to change the variables and navigate.
+feel free to change the variables and navigate.
 
   > In this project, the test does not use seconds to make faster the bundle construction.
 

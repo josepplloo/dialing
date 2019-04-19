@@ -26,7 +26,7 @@ public class Employee implements Comparable<Employee> {
 
   @Override
   public int compareTo(Employee employee) {
-        return this.role.getPriority().compareTo(employee.getRole().getPriority());
+    return this.role.getPriority().compareTo(employee.getRole().getPriority());
   }
 
   enum Priority {
@@ -42,7 +42,7 @@ public class Employee implements Comparable<Employee> {
     }
 
     public Integer getPriority() {
-        return priority;
+      return priority;
     }
     
   }

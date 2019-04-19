@@ -11,11 +11,7 @@ import java.util.logging.Logger;
 import com.mycompany.model.*;
 import org.junit.Test;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-{
+public class AppTest {
   private static final Logger LOGGER = Logger.getLogger(AppTest.class.getName());
 
     @Test

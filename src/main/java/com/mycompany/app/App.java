@@ -1,16 +1,11 @@
 package com.mycompany.app;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.*;
 import com.mycompany.model.*;
 
-/**
- * Hello world!
- *
- */
 public class App {
 
   public static void main(String[] args) throws Exception {

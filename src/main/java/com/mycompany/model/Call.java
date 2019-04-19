@@ -10,18 +10,18 @@ public class Call {
   }
 
   public int getNumber() {
-		return number;
+    return number;
 	}
-	public void setNumber(int number) {
+  public void setNumber(int number) {
 		this.number = number;
-	}
-	public Integer getTime() {
+  }
+  public Integer getTime() {
 		return time;
-	}
-	public void setTime(Integer time) {
+  }
+  public void setTime(Integer time) {
 		this.time = time;
-	}
-	public void print() {
-    System.out.println("Number:"+number + ", Time:"+time);
+  }
+  public void print() {
+    System.out.println("Number: " + number + ", Time: " + time);
   }
 }
